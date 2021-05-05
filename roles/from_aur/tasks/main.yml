@@ -1,0 +1,41 @@
+- name: clone yay repository
+  become: no
+  git:
+    repo: https://aur.archlinux.org/yay.git
+    dest: /tmp/yay
+
+- name: install yay
+  become: no
+  command: 
+    cmd: makepkg -si --noconfirm --needed
+  args:
+    chdir: /tmp/yay
+
+- name: create user for aur use
+  user:
+    name: aur_builder
+    home: "{{ temp_dir }}"
+    group: wheel
+
+- name: add permissions to aur_builder
+  lineinfile:
+    path: /etc/sudoers.d/11-install-aur_builder
+    line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+    create: yes
+    validate: 'visudo -cf %s'
+
+- name: update yay cache
+  aur: 
+    use: yay
+    upgrade: yes
+    aur_only: yes
+  become: true
+  become_user: aur_builder
+
+- name: install some pkgs
+  aur: 
+    use: yay
+    name: "{{ packages }}"
+    aur_only: yes
+  become: true
+  become_user: aur_builder  

@@ -1,0 +1,61 @@
+- name: update pacman cache
+  pacman:
+    update_cache: yes
+
+- name: install essentials packages
+  pacman:
+    name: "{{ packages }}"
+    state: present
+
+- name: add user in some groups
+  user:
+    name: "{{ user }}"
+    groups: "{{ group }}"
+    append: yes
+
+- name: create local bin
+  file:
+    path: "{{ home_bin }}"
+    state: directory
+    mode: '0755'
+
+- name: download helm
+  unarchive:
+    src: https://get.helm.sh/helm-v{{ helm_version }}-linux-arm64.tar.gz
+    dest: "{{ home_bin }}"
+    remote_src: yes
+    extra_opts:
+    - --strip-components=1
+    exclude:
+    - LICENSE
+    - README.md
+    mode: '0755'
+
+- name: download kubectl
+  get_url:
+    url: "https://dl.k8s.io/release/v{{ kubectl_version }}/bin/linux/amd64/kubectl"
+    dest: "{{ home_bin }}"
+    mode: '0755'
+
+- name: download hashicorp tools
+  unarchive:
+    src: "{{ item }}"
+    dest: "{{ home_bin }}"
+    mode: '0755'
+    remote_src: yes
+  loop:
+    - https://releases.hashicorp.com/terraform/{{ tf_version }}/terraform_{{ tf_version }}_linux_amd64.zip
+    - https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip
+
+- name: download aws cli
+  unarchive:
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: install aws cli
+  command: ./aws/install -i /usr/local/aws-cli -b {{ home_bin }}
+  become: yes
+  args:
+    chdir: /tmp
+  notify: "docker"

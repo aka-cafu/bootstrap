@@ -1,0 +1,69 @@
+# principal user #
+user: felipe
+# list of groups #
+group: docker,vboxusers
+home_bin: /usr/local/bin
+packages:
+  # audio #
+  - pulseaudio 
+  - pulseaudio-alsa 
+  - pulseaudio-bluetooth 
+  - pulseaudio-equalizer
+  - alsa-utils
+  - pavucontrol
+  - playerctl 
+  # tools #
+  - lsof
+  - strace
+  - sysstat
+  - iotop
+  - tcpdump
+  - ethtool
+  - htop  
+  # system #
+  - openssl
+  - pkg-config
+  - dmidecode
+  - gvfs 
+  - gvfs-smb 
+  - netcat
+  - tree
+  - zsh
+  - zsh-completions
+  - jq
+  - tar
+  - zip
+  - unzip
+  # apps #
+  - firefox
+  - remmina  
+  - libreoffice-still  
+  - neofetch
+  - pwgen
+  - flameshot
+  - terminator
+  - code
+  - cronie
+  - keepass 
+  - cups
+  - docker
+  - podman
+  - pwgen
+  - tmux
+  - virtualbox
+  - vagrant
+  # network #
+  - curl
+  - wget
+  - whois
+  - openconnect
+  - dhcpcd
+  - ppp
+  - inetutils
+# k8s tools #  
+helm_version: 3.5.4
+kubectl_version: 1.20.0 
+# hashicorp tools # 
+tf_version: 0.13.0
+packer_version: 1.7.2
+vagrant_version: 2.2.15
