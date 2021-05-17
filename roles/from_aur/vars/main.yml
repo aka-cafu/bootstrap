@@ -2,3 +2,4 @@ temp_dir: /tmp/aur_builder
 packages:
   - spotify
   - google-chrome
+  - slack-desktop
